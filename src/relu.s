@@ -25,13 +25,24 @@
 relu:
     li t0, 1             
     blt a1, t0, error     
-    li t1, 0 # t1 = i = 0
+    li t1, 0                # t1 = index of the element
 
 loop_start:
-    # TODO: Add your own implementation
-    blt t1, a1, loop_end # if i >= a1, end loop
+    bge t1, a1, done        # if t1 >= a1, end relu
+    slli t2, t1, 2          # t2 = t1 * 4
+    add t2, a0, t2          # pointer address of ecah element
+    lw t3, 0(t2)            # load element, t3 = element
+    blt t3, x0, set_zero
+    j skip_set_zero
 
-loop_end:
+set_zero:
+    sw x0, 0(t2)
+
+skip_set_zero:
+    addi t1, t1, 1
+    j loop_start
+
+done:
     jr ra
 
 error:
