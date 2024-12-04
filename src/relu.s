@@ -25,10 +25,14 @@
 relu:
     li t0, 1             
     blt a1, t0, error     
-    li t1, 0             
+    li t1, 0 # t1 = i = 0
 
 loop_start:
     # TODO: Add your own implementation
+    blt t1, a1, loop_end # if i >= a1, end loop
+
+loop_end:
+    jr ra
 
 error:
     li a0, 36          

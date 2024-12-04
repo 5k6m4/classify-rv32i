@@ -21,7 +21,9 @@ abs:
     lw t0 0(a0)
     bge t0, zero, done
 
-    # TODO: Add your own implementation
+    xori t1, t0, -1 # t1 = 1's compliment of t0
+    addi t0, t1, 1  # t0 = 1's compliment of t0 + 1 = abs(t0)
+    sw t0 0(a0)     # update the value at the pointer address
 
 done:
     # Epilogue
