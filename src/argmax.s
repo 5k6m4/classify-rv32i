@@ -25,12 +25,30 @@ argmax:
     li t6, 1
     blt a1, t6, handle_error
 
-    lw t0, 0(a0)
+    lw t0, 0(a0)            # current max value
 
-    li t1, 0
-    li t2, 1
+    li t1, 0                # index for currnet max element
+    li t2, 1                # start checking from the second element
+
 loop_start:
-    # TODO: Add your own implementation
+    bge t2, a1, done
+    slli t3, t2, 2          # t3 = t2 * 2
+    add t3, a0, t3          # pointer address of each element
+    lw t4, 0(t3)            # load element, t4 = element
+    blt t0, t4, update_max  # new element > current max
+    j skip_update 
+
+update_max:
+    addi t0, t4, 0         # update max value
+    addi t1, t2, 0         # update index of max element
+
+skip_update:
+    addi t2, t2, 1          # index increment
+    j loop_start
+
+done:
+    addi a0, t1, 0
+    jr ra
 
 handle_error:
     li a0, 36
