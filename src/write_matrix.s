@@ -62,7 +62,20 @@ write_matrix:
     bne a0, t0, fwrite_error
 
     # mul s4, s2, s3   # s4 = total elements
-    # FIXME: Replace 'mul' with your own implementation
+    li s4, 0 # init multiplication result
+
+mul_loop:
+    beq s3, x0, mul_loop_end # if multiplier = 0, end multiplication
+    andi t0, s3, 1 # get multiplier LSB
+    beq t0, x0, skip_add # if LSB = 0, skip add multiplicand
+    add s4, s4, s2 # add multiplicand to multiplication result
+
+skip_add:
+    slli s2, s2, 1 # multiply multiplicand by 2
+    srli s3, s3, 1 # get multiplier next bit
+    j mul_loop
+
+mul_loop_end:
 
     # write matrix data to file
     mv a0, s0
