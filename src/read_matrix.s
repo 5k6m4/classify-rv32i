@@ -75,8 +75,20 @@ read_matrix:
     sw t2, 0(s4)     # saves num cols
 
     # mul s1, t1, t2   # s1 is number of elements
-    # FIXME: Replace 'mul' with your own implementation
+    li s1, 0 # init multiplication result
 
+mul_loop:
+    beq t2, x0, mul_end # if multiplier = 0, end multiplication
+    andi t3, t2, 1 # get multiplier LSB
+    beq t3, x0, skip_add # if LSB = 0, skip add mulitplicand
+    add s1, s1, t1 # add multiplicand to multiplication result
+
+skip_add:
+    slli t1, t1, 1 # multiply multiplicand by 2
+    srli t2, t2, 1 # get multiplier next bit
+    j mul_loop
+
+mul_end:
     slli t3, s1, 2
     sw t3, 24(sp)    # size in bytes
 
